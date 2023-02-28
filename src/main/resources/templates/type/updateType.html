@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="index::header">
+  <title>修改类型信息</title>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+  <input type="hidden" name="id" th:value="${type.getId()}">
+  <div class="layui-form-item">
+    <label class="layui-form-label required">类型名称</label>
+    <div class="layui-input-block">
+      <input  type="text" name="name" lay-verify="required" class="layui-input" th:value="${type.getName()}">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text" >
+      <label class="layui-form-label">备注信息</label>
+      <div class="layui-input-block">
+        <textarea name="remarks" class="layui-textarea" th:text="${type.getRemarks()}"></textarea>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认修改</button>
+      </div>
+    </div>
+  </div>
+  <script src="${pageContext.request.contextPath}/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+  <script>
+    layui.use(['form'], function () {
+      var form = layui.form,
+              layer = layui.layer,
+              $ = layui.$;
+
+      //监听提交
+      form.on('submit(saveBtn)', function (data) {
+        var datas = data.field;//form单中的数据信息
+        //向后台发送数据提交添加
+        $.ajax({
+          url: "/type-info/updateTypeSubmit",
+          type: "POST",
+          // data:datas,
+          contentType: "application/json",
+          data: JSON.stringify(datas),
+          success: function (result) {
+            if (result.code == 200) {//如果成功
+              layer.msg('修改成功', {
+                icon: 6,
+                time: 500
+              }, function () {
+                parent.window.location.reload();
+                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(iframeIndex);
+              })
+            } else {
+              layer.msg("修改失败");
+            }
+          }
+        })
+        return false;
+      });
+
+    });
+  </script>
+</div>
+</body>
+
+</html>

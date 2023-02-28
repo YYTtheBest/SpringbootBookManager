@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.YYT.springbootbookmanager.mapper.BookInfoMapper">
+
+    <resultMap id="book_type" type="com.YYT.springbootbookmanager.entity.BookInfo">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="author" column="author" jdbcType="VARCHAR"/>
+            <result property="publish" column="publish" jdbcType="VARCHAR"/>
+            <result property="isbn" column="isbn" jdbcType="VARCHAR"/>
+            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+            <result property="language" column="language" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="DOUBLE"/>
+            <result property="publishDate" column="publish_date" jdbcType="DATE"/>
+            <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <association property="typeInfo">
+                <result column="tid" property="id"/>
+                <result column="tname" property="name"/>
+                <result column="remarks" property="remarks"/>
+            </association>
+    </resultMap>
+
+    <select id="queryBookInfoWithTypeInfo" resultMap="book_type">
+        SELECT book_info.*, t.tid, t.tname, t.remarks
+        FROM type_info as t,book_info
+                  where t.tid = book_info.type_id
+        <if test="name!=null">
+            and book_info.name like '%${name}%'
+        </if>
+        <if test="isbn!=null">
+            and book_info.isbn like '%${isbn}%'
+        </if>
+        <if test="typeId!=null">
+            and  book_info.type_id like '%${typeId}%'
+        </if>
+    </select>
+
+</mapper>

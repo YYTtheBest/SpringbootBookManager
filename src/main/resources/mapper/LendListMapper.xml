@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.YYT.springbootbookmanager.mapper.LendListMapper">
+
+    <resultMap id="BaseResultMap" type="com.YYT.springbootbookmanager.entity.LendList">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="bookId" column="bookId" jdbcType="INTEGER"/>
+            <result property="readerId" column="readerId" jdbcType="INTEGER"/>
+            <result property="lendDate" column="lendDate" jdbcType="TIMESTAMP"/>
+            <result property="backDate" column="backDate" jdbcType="TIMESTAMP"/>
+            <result property="backType" column="backType" jdbcType="INTEGER"/>
+            <result property="exceptRemarks" column="exceptRemarks" jdbcType="VARCHAR"/>
+        <association property="bookInfo" javaType="com.YYT.springbootbookmanager.entity.BookInfo">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+
+        <association property="readerInfo" javaType="com.YYT.springbootbookmanager.entity.ReaderInfo">
+            <id property="id" column="id"/>
+            <result property="realName" column="readName"/>
+            <result property="readerNumber" column="readerNumber"/>
+        </association>
+    </resultMap>
+
+    <select id="queryLendListAll" parameterType="com.YYT.springbootbookmanager.entity.LendList" resultMap="BaseResultMap">
+        SELECT lend.*,
+        book.name as bookName,
+        reader.realName as realName,
+        reader.readerNumber
+        from lend_list lend LEFT JOIN book_info book  on book.id=lend.bookId
+        LEFT JOIN reader_info reader on reader.id=lend.readerId
+        <!--带条件的高级查询-->
+        <where>
+            <if test="bookInfo!=null">
+                <!--根据图书名称查询-->
+                <if test="bookInfo.name!=null and bookInfo.name!=''">
+                    and book.name like '%${bookInfo.name}%'
+                </if>
+                <!--还需判断返还时间是否为空
+                如果书已经被借走，状态为1，还没有还，则返回时间=null
+                如果书已经归还，状态为0，则返回时间非空，即还书时间
+                -->
+                <if test="bookInfo.status!=null and bookInfo.status==1">
+                    and book.status=1 and backDate is null
+                </if>
+                <if test="bookInfo.status!=null and bookInfo.status==0">
+                    and book.status=0 and backDate is not null
+                </if>
+            </if>
+            <!--根据借阅卡查询-->
+            <if test="readerInfo!=null">
+                <if test="readerInfo.readerNumber!=null and readerInfo.readerNumber!=''">
+                    and readerNumber like '%${readerInfo.readerNumber}%'
+                </if>
+            </if>
+            <!--根据归还类型查询-->
+            <if test="backType!=null">
+                and backType=#{backType}
+            </if>
+        </where>
+        order by lend.lendDate desc
+    </select>
+
+
+    <!--查询时间线-->
+    <select id="queryLookBookList" resultMap="BaseResultMap">
+        SELECT
+        lend.*,
+        reader.readerNumber,
+        bookInfo.name  AS  bookName,
+        reader.realName AS realName
+        FROM
+        lend_list lend
+        LEFT JOIN reader_info reader ON reader.id = lend.readerId
+        LEFT JOIN book_info bookInfo ON bookInfo.id = lend.bookId
+        <where>
+
+            <if test="bid!=null">and bookInfo.id=#{bid} </if>
+
+            <if test="rid!=null">and reader.id=#{rid} </if>
+
+        </where>
+        order by lend.id desc
+    </select>
+    <select id="queryLengListAll" resultType="com.YYT.springbootbookmanager.entity.LendList"></select>
+
+
+    <!--还书-->
+    <update id="updateLendListSubmit" parameterType="com.YYT.springbootbookmanager.entity.LendList">
+        update lend_list
+        <set>
+            backDate=#{backDate},
+            <if test="backType!=null">
+                backType=#{backType},
+            </if>
+            <if test="exceptRemarks!=null and exceptRemarks!=''">
+                exceptRemarks=#{exceptRemarks}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

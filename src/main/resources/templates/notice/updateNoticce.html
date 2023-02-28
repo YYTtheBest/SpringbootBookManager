@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="index::header"></head>
+<body>
+<div class="layui-form layuimini-form">
+  <input type="hidden" name="id" th:value="${notice.getId()}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">公告主题</label>
+    <div class="layui-input-block">
+      <input type="text" name="topic" readonly="true" th:value="${notice.getTopic()}" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">发布人</label>
+    <div class="layui-input-block">
+      <input type="text" name="author" readonly="true" th:value="${notice.getAuthor()}" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">公告内容</label>
+    <div class="layui-input-block">
+      <textarea name="content" readonly="true" class="layui-textarea" th:text="${notice.getContent()}"> </textarea>
+    </div>
+  </div>
+</div>
+<script>
+  layui.use(['form'], function () {
+    var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="index::header">
+</head>
+<body>
+<div class="layui-container" style=" margin-top: 40px;">
+  <div class="layui-row"  style="display: flex;justify-content: center">
+<!--    <h1 style="font-size: 30px">书籍查询</h1>-->
+  </div>
+  <div class="layui-row">
+    <div class="layui-col-md4" style="height: 230px">
+    </div>
+    <div class="layui-col-md4">
+      <div ><img src="/static/images/eleps.png" alt="">
+      </div>
+    </div>
+    <div class="layui-col-md4">
+    </div>
+  </div>
+
+  <div class="layui-row">
+    <div class="layui-col-md4" style="height: 80px">
+    </div>
+    <div class="layui-col-md4">
+      <div >
+        <div class="layui-form layuimini-form">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <input style="width: 290px" type="text" name="name" lay-verify="required" lay-reqtext="书籍名称不能为空" placeholder="请输入书籍名称" value="" class="layui-input-inline layui-input">
+              <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">搜索</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-md4">
+    </div>
+  </div>
+  <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+</div>
+<script>
+  layui.use(['form','table'], function () {
+    var form = layui.form,
+            layer = layui.layer,
+            table=layui.table,
+            $ = layui.$;
+    //监听提交
+    form.on('submit(saveBtn)', function (data) {
+      let s = data.field.name;
+    console.log(s)
+      $.ajax({
+        type: "POST",
+        url: "/search",
+        contentType:"application/json",
+        data: JSON.stringify(data.field),
+        response:{
+          statusCode: 200
+        },
+        success: function (result) {
+          if (result.code == 200) {
+            $("#currentTableId").attr("class","layui-table-view")
+
+            table.render({
+             elem: "#currentTableId",
+             data:result.data,
+             cols: [
+               [
+                 {field:'name', width:190, title: '书名', sort: true}
+                 ,{field:'author', width:120, title: '作者'}
+                 ,{field:'publish', width:130, title: '出版社', sort: true}
+                 ,{field:'isbn', width:80, title: 'ISBN'}
+                 ,{field:'introduction',width:180, title: '简介', sort: true}
+                 ,{field:'language',width:60, title: '语言', sort: true}
+                 ,{field:'price',width:80, title: '价格', templet:function(d){
+                   return parseFloat(d.price).toFixed(2);
+                 }}
+                 ,{field:'publishDate', width:110, title: '出版日期', sort: true}
+                 ,{templet:'<div>{{d.typeInfo.name}}</div>',width: 80,title:'类型'}
+                 , {
+                 field: 'status', width: 80, align: 'center', templet: function (d) {
+                   if (d.status == 1) {
+                     return '借出';
+                   }
+                   if (d.status == 0) {
+                     return '未借出';
+                   } else {
+                     return '异常';
+                   }
+                 }, title: '状态'
+               }
+               ]
+             ],
+           })
+
+          }else {
+            layer.msg('没有这本书哦', {icon: 2});
+            $("#currentTableId").attr("class","layui-hide")
+
+
+          }
+        },
+              })
+      return false;
+
+    });
+
+  });
+
+</script>
+
+
+</body>
+</html>

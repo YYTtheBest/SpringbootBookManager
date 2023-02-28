@@ -1,0 +1,104 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+    <title>修改密码</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" th:href="@{/static/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/static/lib/layui-v2.6.3/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/css/layuimini.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+    <script src="/static/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+</head>
+<body>
+
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">工号</label>
+        <div class="layui-input-block">
+            <input type="text" name="id" lay-verify="required" th:value="${teacher.getId()}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="required" th:value="${teacher.getName()}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">性别</label>
+        <div class="layui-input-block">
+            <input type="text" name="sex" lay-verify="required" th:value="${teacher.getSex()}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">年龄</label>
+        <div class="layui-input-block">
+            <input type="text" name="age" lay-verify="required" th:value="${teacher.getAge()}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">职务</label>
+        <div class="layui-input-block">
+            <input type="text" name="position" lay-verify="required" th:value="${teacher.getPosition()}" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认修改</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+                //向后台发送数据提交添加
+                $.ajax({
+                    url:"/update",
+                    type:"POST",
+                    contentType: 'application/json',
+
+                    data:JSON.stringify(data.field),
+                    response: {
+                        statusCode: 200
+                    },
+                    success:function(result){
+                        if(result.code==200){//如果成功
+                            layer.msg("修改成功",{
+                                icon:6,
+                                time:500
+                            },function(){
+                                parent.window.location.reload();
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                            })
+                        }else{
+                            layer.msg(result.msg);
+                        }
+                    }
+                })
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

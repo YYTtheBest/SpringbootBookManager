@@ -1,0 +1,35 @@
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="index::header">
+
+    <title>时间线查询</title>
+
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>借书时间线</legend>
+</fieldset>
+<ul class="layui-timeline">
+    <li th:each="lists:${list}" class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title" th:text="${#temporals.format(lists.getLendDate(),'yyyy-MM-dd HH:mm:ss')}"></h3>
+         <p>
+             <span th:text="${lists.getLendDate()}"></span>
+             <br>
+             <span th:text="${lists.getReaderInfo().getRealName()}"></span>
+             <span style="color: orangered">借走了</span>《
+             <span th:text="${lists.getBookInfo().getName()}"></span>》
+             <br>
+             <div th:if="${lists.getBackDate() ne null}">
+<span th:text="${#temporals.format(lists.getBackDate(),'yyyy-MM-dd HH:mm:ss')}"></span>
+             <span th:if="${lists.getBackDate()} ne null" style="color: greenyellow">归还</span>
+
+        </div>
+         </p>
+        </div>
+    </li>
+
+</ul>
+</body>
+</html>

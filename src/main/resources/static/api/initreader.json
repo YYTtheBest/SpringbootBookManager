@@ -1,0 +1,36 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/search"
+  },
+  "logoInfo": {
+    "title": "图书管理",
+    "image": "static/images/favicon.ico",
+    "href": "/index"
+  },
+  "menuInfo": [
+    {
+      "title": "功能管理",
+      "icon": "fa fa-bars",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "借阅管理",
+          "href": "lend-list/queryLookBookList2",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        },
+        {
+          "title": "公告管理",
+          "href": "notice/noticeIndexOfReader",
+          "icon": "fa fa-bell",
+          "target": "_self"
+        }
+
+      ]
+    }
+      ]
+
+
+}
