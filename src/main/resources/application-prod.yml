@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: lsy200324
+    url: jdbc:mysql://101.43.43.19:3307/Library?serverTimezone=UTC
+  mvc:
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/
+  thymeleaf:
+    prefix: classpath:/templates/
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*xml
+  scripting-language-driver:
+    thymeleaf:
+      template-file:
+        encoding: UTF-8
+        cache-enabled: false
+  configuration:
+    map-underscore-to-camel-case: false
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8001
+logging:
+  level:
+    com.YYT.springbootbookmanager : info
+
+
