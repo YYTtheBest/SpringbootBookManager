@@ -3,7 +3,7 @@
 <head th:include="index::header">
     <title>读者添加</title>
     <style>
-        *{
+        * {
             background-color: #fff;
         }
     </style>
@@ -13,20 +13,23 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">读者卡号</label>
         <div class="layui-input-block">
-            <input type="text" name="readerNumber" lay-verify="required" lay-reqtext="读者卡号不能为空" placeholder="请输入读者卡号" autocomplete="off" class="layui-input">
+            <input type="text" name="readerNumber" lay-verify="required" lay-reqtext="读者卡号不能为空"
+                   placeholder="请输入读者卡号" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label required">用户名</label>
         <div class="layui-input-block">
-            <input type="text" name="username" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <input type="text" name="username" lay-verify="required" lay-reqtext="用户名不能为空"
+                   placeholder="请输入用户名" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label required">真实姓名</label>
         <div class="layui-input-block">
-            <input type="text" name="realName" lay-verify="required" lay-reqtext="真实姓名不能为空" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
+            <input type="text" name="realName" lay-verify="required" lay-reqtext="真实姓名不能为空"
+                   placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
         </div>
     </div>
 
@@ -34,28 +37,28 @@
         <label class="layui-form-label required">性别</label>
         <div class="layui-input-block">
             <input type="radio" name="sex" value="男" title="男" checked="checked"/>
-            <input type="radio" name="sex" value="女" title="女" />
+            <input type="radio" name="sex" value="女" title="女"/>
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label required">出生日期</label>
         <div class="layui-input-block">
-            <input type="text" name="birthday" id="date" lay-verify="required"  class="layui-input" autocomplete="off">
+            <input type="text" name="birthday" id="date" lay-verify="required" class="layui-input" autocomplete="off">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label required">联系方式</label>
         <div class="layui-input-block">
-            <input type="text" name="tel" lay-verify="required"  class="layui-input" autocomplete="off">
+            <input type="text" name="tel" lay-verify="required" class="layui-input" autocomplete="off">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label required">邮箱地址</label>
         <div class="layui-input-block">
-            <input type="text" name="email" autocomplete="off"  class="layui-input">
+            <input type="text" name="email" autocomplete="off" class="layui-input">
         </div>
     </div>
 
@@ -67,40 +70,40 @@
 </div>
 <script src="${pageContext.request.contextPath}/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form','laydate'], function () {
+    layui.use(['form', 'laydate'], function () {
         var form = layui.form,
             layer = layui.layer,
-            laydate=layui.laydate,
+            laydate = layui.laydate,
             $ = layui.$;
 
         //日期
         laydate.render({
             elem: '#date',
-            trigger:'click'
+            trigger: 'click'
         });
 
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            var datas=data.field;//form单中的数据信息
+            var datas = data.field;//form单中的数据信息
             //向后台发送数据提交添加
             $.ajax({
-                url:"/reader-info/addreader",
-                type:"POST",
+                url: "/reader-info/addreader",
+                type: "POST",
                 //data:datas,
-                contentType:'application/json',
-                data:JSON.stringify(datas),
-                success:function(result){
-                    if(result.code==200){//如果成功
-                        layer.msg('添加成功',{
-                            icon:6,
-                            time:500
-                        },function(){
+                contentType: 'application/json',
+                data: JSON.stringify(datas),
+                success: function (result) {
+                    if (result.code == 200) {//如果成功
+                        layer.msg('添加成功,默认密码为123456', {
+                            icon: 6,
+                            time: 500
+                        }, function () {
                             parent.window.location.reload();
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
                         })
-                    }else{
+                    } else {
                         layer.msg("添加失败");
                     }
                 }

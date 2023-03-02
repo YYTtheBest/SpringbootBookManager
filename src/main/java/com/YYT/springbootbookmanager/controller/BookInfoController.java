@@ -10,13 +10,11 @@ import com.YYT.springbootbookmanager.utils.pageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.extern.java.Log;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.awt.print.Book;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +56,7 @@ public class BookInfoController {
      */
     @RequestMapping("/bookAll")
     @ResponseBody
-    public Object bookAll(BookInfo bookInfo, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
+    public Object bookAll(BookInfo bookInfo, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int limit) {
 
         log.warning(bookInfo.toString());
         QueryWrapper<BookInfo> queryWrapper = new QueryWrapper<>();
