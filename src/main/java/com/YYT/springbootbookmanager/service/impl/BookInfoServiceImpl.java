@@ -5,8 +5,7 @@ import com.YYT.springbootbookmanager.mapper.BookInfoMapper;
 import com.YYT.springbootbookmanager.service.IBookInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

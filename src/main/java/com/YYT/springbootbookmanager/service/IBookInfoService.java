@@ -2,7 +2,6 @@ package com.YYT.springbootbookmanager.service;
 
 import com.YYT.springbootbookmanager.entity.BookInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.github.pagehelper.PageInfo;
 
 import java.awt.print.Book;
 import java.util.List;

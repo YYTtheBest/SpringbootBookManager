@@ -4,6 +4,8 @@ package com.YYT.springbootbookmanager.controller;
 import com.YYT.springbootbookmanager.entity.Notice;
 import com.YYT.springbootbookmanager.service.INoticeService;
 import com.YYT.springbootbookmanager.utils.Result;
+import com.YYT.springbootbookmanager.utils.pageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,20 +26,24 @@ import java.util.List;
 @Controller
 @RequestMapping("/notice")
 public class NoticeController {
-
+    @Resource
+    private pageHelper pageHelper;
     @Resource
     private INoticeService noticeService;
 
     /**
      * 管理员公告管理页面
+     *
      * @return
      */
     @GetMapping("/noticeIndexOfAdmin")
     public String noticeIndexOfAdmin() {
         return "notice/noticeIndexOfAdmin";
     }
+
     /**
      * 读者公告管理页面
+     *
      * @return
      */
     @GetMapping("/noticeIndexOfReader")
@@ -53,9 +59,14 @@ public class NoticeController {
 //    todo:添加标题查询功能
     @GetMapping("/noticeAll")
     @ResponseBody
-    public Result noticeAll() {
-        List<Notice> list = noticeService.list();
-        return Result.ok(list);
+    public Result noticeAll(String topic, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
+        QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
+        if (topic != null) {
+            queryWrapper.like(true, "topic", topic);
+        }
+        Result result = pageHelper.defaultPage(page, limit, noticeService, queryWrapper);
+
+        return result;
 
     }
 

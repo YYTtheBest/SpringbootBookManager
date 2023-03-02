@@ -7,7 +7,6 @@ import com.YYT.springbootbookmanager.entity.Admin;
 import com.YYT.springbootbookmanager.entity.ReaderInfo;
 import com.YYT.springbootbookmanager.service.IAdminService;
 import com.YYT.springbootbookmanager.service.IReaderInfoService;
-import com.YYT.springbootbookmanager.utils.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +24,7 @@ import java.io.IOException;
 @Controller
 @Log
 public class LoginController {
+
     @Resource
     private IAdminService adminService;
 
@@ -100,6 +99,7 @@ public class LoginController {
 
     /**
      * 验证码
+     *
      * @param request
      * @param response
      */

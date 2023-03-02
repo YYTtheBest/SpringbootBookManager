@@ -5,6 +5,8 @@ import com.YYT.springbootbookmanager.entity.TypeInfo;
 import com.YYT.springbootbookmanager.service.impl.TypeInfoServiceImpl;
 import com.YYT.springbootbookmanager.utils.BaseUtils;
 import com.YYT.springbootbookmanager.utils.Result;
+import com.YYT.springbootbookmanager.utils.pageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/type-info")
 public class TypeInfoController {
-
+    @Resource
+    private pageHelper pageHelper;
     @Resource
     private TypeInfoServiceImpl typeInfoService;
 
@@ -36,14 +39,20 @@ public class TypeInfoController {
 
     @RequestMapping("/typeAll")
     @ResponseBody
-    public Result typeAll(String name) {
-        List<TypeInfo> list = typeInfoService.list();
+    public Result typeAll(String name, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
+        QueryWrapper<TypeInfo> queryWrapper = new QueryWrapper<>();
+        if (name != null) {
+            queryWrapper.like(true, "tname", name);
+        }
+        Result result = pageHelper.defaultPage(page, limit, typeInfoService, queryWrapper);
 
-        return Result.ok(list);
+
+        return result;
     }
 
     /**
-     *添加书籍类型
+     * 添加书籍类型
+     *
      * @param model
      * @return
      */
@@ -70,6 +79,7 @@ public class TypeInfoController {
     /**
      * 通过ID获取type信息用于查看或修改
      * GET http://127.0.0.1:8090/type-info/queryTypeById
+     *
      * @param id
      * @param m
      * @return
@@ -84,28 +94,30 @@ public class TypeInfoController {
 
     /**
      * 修改提交功能
+     *
      * @param info
      * @return
      */
     @RequestMapping("/updateTypeSubmit")
     @ResponseBody
-    public Result updateTypeSubmit(@RequestBody TypeInfo info){
+    public Result updateTypeSubmit(@RequestBody TypeInfo info) {
         boolean b = typeInfoService.updateById(info);
-        return BaseUtils.OkError(b,null);
+        return BaseUtils.OkError(b, null);
 
     }
 
     /**
      * 删除功能
+     *
      * @param ids
      * @return
      */
     @RequestMapping("/deleteType")
     @ResponseBody
-    public Result deleteType(String ids){
-        List<String> list= Arrays.asList(ids.split(","));
+    public Result deleteType(String ids) {
+        List<String> list = Arrays.asList(ids.split(","));
         boolean b = typeInfoService.removeByIds(list);
-       return BaseUtils.OkError(b, null);
+        return BaseUtils.OkError(b, null);
 
     }
 }

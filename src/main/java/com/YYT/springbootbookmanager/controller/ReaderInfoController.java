@@ -6,7 +6,8 @@ import com.YYT.springbootbookmanager.service.IAdminService;
 import com.YYT.springbootbookmanager.service.IReaderInfoService;
 import com.YYT.springbootbookmanager.utils.BaseUtils;
 import com.YYT.springbootbookmanager.utils.Result;
-import org.springframework.http.HttpRequest;
+import com.YYT.springbootbookmanager.utils.pageHelper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.Reader;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +31,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/reader-info")
 public class ReaderInfoController {
+    @Resource
+    private pageHelper pageHelper;
+
     @Resource
     private IReaderInfoService readerInfoService;
     @Resource
@@ -59,9 +62,21 @@ public class ReaderInfoController {
      */
     @GetMapping("/readerAll")
     @ResponseBody
-    public Result ReaderAll(ReaderInfo reader, @RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "15") int limit) {
-        List<ReaderInfo> readerInfos = readerInfoService.listAllReaderInfos(reader);
-        return Result.ok(readerInfos);
+    public Result ReaderAll(ReaderInfo reader, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
+        QueryWrapper<ReaderInfo> queryWrapper = new QueryWrapper<>();
+        if (reader.getTel() != null) {
+            queryWrapper.like(true, "tel", reader.getTel());
+        }
+        if (reader.getUsername() != null) {
+            queryWrapper.like(true, "username", reader.getUsername());
+        }
+        if (reader.getReaderNumber() != null) {
+            queryWrapper.like(true, "readerNumber", reader.getReaderNumber());
+        }
+
+        Result result = pageHelper.defaultPage(page, limit, readerInfoService, queryWrapper);
+        return result;
+
     }
 
     /**

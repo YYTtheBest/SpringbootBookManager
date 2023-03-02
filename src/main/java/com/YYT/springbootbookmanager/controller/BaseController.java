@@ -8,7 +8,6 @@ import com.YYT.springbootbookmanager.service.ITypeInfoService;
 import com.YYT.springbootbookmanager.utils.Result;
 import com.YYT.springbootbookmanager.utils.Resultcode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,10 +37,10 @@ public class BaseController {
 
     @GetMapping("/welcome")
     public Object welcome(Model model) {
-        int bookscount = bookInfoService.count();
-        int lentcount = bookInfoService.count(new QueryWrapper<BookInfo>().eq("status", 1));
-        int incount = bookInfoService.count(new QueryWrapper<BookInfo>().eq("status", 0));
-        int readercount = readerInfoService.count();
+        long bookscount = bookInfoService.count();
+        long lentcount = bookInfoService.count(new QueryWrapper<BookInfo>().eq("status", 1));
+        long incount = bookInfoService.count(new QueryWrapper<BookInfo>().eq("status", 0));
+        long readercount = readerInfoService.count();
         model.addAttribute("bookscount", bookscount);
         model.addAttribute("lentcount", lentcount);
         model.addAttribute("incount", incount);
