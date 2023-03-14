@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -11,6 +10,7 @@ spring:
     static-locations: classpath:/static/
   thymeleaf:
     prefix: classpath:/templates/
+
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*xml
@@ -26,6 +26,6 @@ server:
   port: 8001
 logging:
   level:
-    com.YYT.springbootbookmanager : info
+    com.YYT.springbootbookmanager: info
 
 

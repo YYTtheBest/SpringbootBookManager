@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * 登录
+ */
 @Controller
 @Log
 public class LoginController {
@@ -34,13 +37,20 @@ public class LoginController {
     /**
      * 登录页面
      *
-     * @return
+     * @return html
      */
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
+    /**
+     * 登录传值处理
+     *
+     * @param req   包含“验证码”，”用户名“，”密码“，”用户类型“
+     * @param model
+     * @return
+     */
     @PostMapping("/login")
     public String login(HttpServletRequest req, Model model) {
         LineCaptcha verity = (LineCaptcha) req.getSession().getAttribute("verity");
@@ -91,6 +101,12 @@ public class LoginController {
         }
     }
 
+    /**
+     * 退出登录
+     *
+     * @param req
+     * @return
+     */
     @GetMapping("/logout")
     public Object logout(HttpServletRequest req) {
         req.getSession().invalidate();

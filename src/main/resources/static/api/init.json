@@ -50,6 +50,11 @@
           "href": "admin/adminIndex",
           "icon": "fa fa-user-circle-o",
           "target": "_self"
+        }, {
+          "title": "API",
+          "href": "api",
+          "icon": "fa fa-cog",
+          "target": "_self"
         }
       ]
     }

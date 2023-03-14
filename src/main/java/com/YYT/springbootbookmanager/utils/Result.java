@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-
+/**
+ * 返回信息（Resultful风格）
+ */
 public class Result<T> {
     //    是否成功
     private Boolean success;
@@ -19,16 +21,17 @@ public class Result<T> {
     private T data;
 
 
-    private Result(){
+    private Result() {
 
     }
 
     /**
      * 执行成功，不返回数据
-     * @return
+     *
      * @param <T>
+     * @return
      */
-    public static<T> Result<T> ok() {
+    public static <T> Result<T> ok() {
         Result<T> result = new Result<>();
         result.setSuccess(true);
         result.setCode(Resultcode.SUCCESS);
@@ -38,11 +41,12 @@ public class Result<T> {
 
     /**
      * 带数据返回，成功
+     *
      * @param data 数据
-     * @return
      * @param <T>
+     * @return
      */
-    public static<T> Result<T> ok(T data) {
+    public static <T> Result<T> ok(T data) {
         Result<T> result = new Result<>();
         result.setSuccess(true);
         result.setCode(Resultcode.SUCCESS);
@@ -71,16 +75,16 @@ public class Result<T> {
 
     /**
      * 执行失败
-     *
      */
-    public static <T> Result<T> error(){
+    public static <T> Result<T> error() {
         Result<T> result = new Result<>();
         result.setSuccess(false);
         result.setCode(Resultcode.ERROR);
         result.setMessage("执行失败");
         return result;
     }
-    public static <T> Result<T> error(String msg){
+
+    public static <T> Result<T> error(String msg) {
         Result<T> result = new Result<>();
         result.setSuccess(false);
         result.setCode(Resultcode.ERROR);
@@ -90,6 +94,7 @@ public class Result<T> {
 
     /**
      * 设置是否成功
+     *
      * @param success
      * @return
      */
@@ -100,6 +105,7 @@ public class Result<T> {
 
     /**
      * 设置状态码
+     *
      * @param code
      * @return
      */

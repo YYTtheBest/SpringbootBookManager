@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * 读者信息（包括登录账号密码等） 前端控制器
- * </p>
+ * 读者信息
  *
  * @author YeYutong
  * @since 2022-11-22
@@ -42,12 +40,11 @@ public class ReaderInfoController {
     /**
      * 读者管理页面
      *
-     * @param model
      * @return
      */
     @GetMapping("/readerIndex")
-    public String readerIndex(Model model) {
-        model.addAttribute("display", "读者首页");
+    public String readerIndex() {
+
         return "reader/readerIndex";
 
 
@@ -57,7 +54,7 @@ public class ReaderInfoController {
     /**
      * 查询所有读者信息（带搜索）
      *
-     * @param reader
+     * @param reader 读者信息
      * @return
      */
     @GetMapping("/readerAll")
@@ -94,7 +91,7 @@ public class ReaderInfoController {
     /**
      * 添加读者，默认密码为123456
      *
-     * @param readerInfo
+     * @param readerInfo 读者信息
      * @return
      */
     @RequestMapping("/addreader")
@@ -137,7 +134,7 @@ public class ReaderInfoController {
     /**
      * 删除读者信息
      *
-     * @param ids
+     * @param ids 读者ID
      * @return
      */
     @RequestMapping("/deletereader")
@@ -148,6 +145,13 @@ public class ReaderInfoController {
         return BaseUtils.OkError(b, null);
     }
 
+    /**
+     * 更改读者密码，并进行新旧密码的校验
+     *
+     * @param request
+     * @param map
+     * @return
+     */
     @RequestMapping("/updateReaderPwd")
     @ResponseBody
     public Result updateReaderPwd(HttpServletRequest request, @RequestBody Map<String, String> map) {
@@ -166,12 +170,5 @@ public class ReaderInfoController {
             return Result.error("原密码不正确");
         }
     }
-
-
-    @GetMapping("session")
-    @ResponseBody
-    public Result session(HttpServletRequest request) {
-        request.getSession().setAttribute("user", readerInfoService.getById(8));
-        return Result.ok();
-    }
+    
 }

@@ -6,20 +6,25 @@ import com.YYT.springbootbookmanager.service.IBookInfoService;
 import com.YYT.springbootbookmanager.service.IReaderInfoService;
 import com.YYT.springbootbookmanager.service.ITypeInfoService;
 import com.YYT.springbootbookmanager.utils.Result;
-import com.YYT.springbootbookmanager.utils.Resultcode;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-@Controller
 /**
- * @author 梁思裕
+ * 基础控制类
+ *
+ * @author YeYutong
  */
+@Controller
+
 public class BaseController {
 
     @Resource
@@ -29,12 +34,21 @@ public class BaseController {
     @Resource
     private ITypeInfoService typeInfoService;
 
-
+    /**
+     * 网站初始页
+     *
+     * @return
+     */
     @GetMapping("/index")
     public Object index() {
         return "index";
     }
 
+    /**
+     * 管理员登录的首页
+     *
+     * @return
+     */
     @GetMapping("/welcome")
     public Object welcome(Model model) {
         long bookscount = bookInfoService.count();
@@ -48,14 +62,26 @@ public class BaseController {
         return "welcome";
     }
 
+    /**
+     * 图书查询页面
+     * 用户登录的首页
+     *
+     * @return html
+     */
     @GetMapping("/search")
     public String search() {
         return "search";
     }
 
+    /**
+     * 查询书籍信息
+     *
+     * @param map
+     * @return
+     */
     @PostMapping("/search")
     @ResponseBody
-    public Result searchBy(@RequestBody Map<String,String> map) {
+    public Result searchBy(@RequestBody Map<String, String> map) {
         QueryWrapper<BookInfo> bookInfoQueryWrapper = new QueryWrapper<>();
         bookInfoQueryWrapper.like(true, "name", map.get("name"));
         List<BookInfo> list = bookInfoService.list(bookInfoQueryWrapper);
@@ -70,5 +96,10 @@ public class BaseController {
             return Result.ok(list);
         }
     }
+
+    @GetMapping("/api")
+    public String api() {
+        return "apis";
     }
+}
 

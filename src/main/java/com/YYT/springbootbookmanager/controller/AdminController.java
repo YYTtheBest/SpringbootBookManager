@@ -7,10 +7,7 @@ import com.YYT.springbootbookmanager.utils.pageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -31,11 +28,24 @@ public class AdminController {
     @Resource
     private AdminServiceImpl adminService;
 
+    /**
+     * 管理员列表页面
+     *
+     * @return html
+     */
     @GetMapping("/adminIndex")
     public String adminIndex() {
         return "admin/adminIndex";
     }
 
+    /**
+     * 查询管理员数据，可搜索
+     *
+     * @param admin 管理员姓名及类型
+     * @param page
+     * @param limit
+     * @return JSON
+     */
     @RequestMapping("/adminAll")
     @ResponseBody
     public Result queryAdminAll(Admin admin, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
@@ -50,13 +60,23 @@ public class AdminController {
         return result;
     }
 
+    /**
+     * 管理员添加页面
+     *
+     * @return html
+     */
     @GetMapping("/adminAdd")
     public String adminAdd() {
         return "admin/adminAdd";
     }
 
-
-    @RequestMapping("/addAdminSubmit")
+    /**
+     * 管理员添加提交
+     *
+     * @param admin 添加的管理员对象
+     * @return JSON
+     */
+    @PostMapping("/addAdminSubmit")
     @ResponseBody
     public Result addBookSubmit(Admin admin) {
         adminService.save(admin);
@@ -75,7 +95,7 @@ public class AdminController {
     /**
      * 修改提交
      */
-    @RequestMapping("/updatePwdSubmit")
+    @PostMapping("/updatePwdSubmit")
     @ResponseBody
     public Result updatePwdSubmit(Integer id, String oldPwd, String newPwd) {
         Admin admin = adminService.getById(id);//根据id查询对象
@@ -91,7 +111,7 @@ public class AdminController {
     /**
      * 删除
      */
-    @RequestMapping("/deleteAdminByIds")
+    @PostMapping("/deleteAdminByIds")
     @ResponseBody
     public Result deleteAdminByIds(String ids) {
         List<String> list = Arrays.asList(ids.split(","));

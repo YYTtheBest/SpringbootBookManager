@@ -13,10 +13,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 借阅记录（谁在何时借走了什么书，并且有没有归还，归还时间多少） 前端控制器
+ * 借阅记录
  *
  * @author YeYutong
  * @since 2022-11-22
@@ -61,13 +58,13 @@ public class LendListController {
     /**
      * 查询借阅信息
      *
-     * @param type
-     * @param readerNumber
-     * @param name
-     * @param status
+     * @param type         类型（int）
+     * @param readerNumber 读者卡号
+     * @param name         书名
+     * @param status       书籍状态
      * @return JSON(所有的记录信息)
      */
-    @RequestMapping("/lendAll")
+    @GetMapping("/lendAll")
     @ResponseBody
     public Result lendAll(Integer type, String readerNumber, String name, Integer status, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
         LendList info = new LendList();
@@ -108,7 +105,7 @@ public class LendListController {
      * ids：字符串 书id的集合
      */
     @ResponseBody
-    @RequestMapping("/addLend")
+    @PostMapping("/addLend")
     public Result addLend(@RequestParam("readerNumber") String readerNumber, @RequestParam("ids") String ids) {
         //获取图书id的集合
         List<String> list = Arrays.asList(ids.split(","));
@@ -143,12 +140,12 @@ public class LendListController {
     /**
      * 删除借阅记录
      *
-     * @param ids
-     * @param bookIds
+     * @param ids     借阅信息的ID
+     * @param bookIds 书籍的ID
      * @return JSON(删除借阅记录)
      */
     @ResponseBody
-    @RequestMapping("/deleteLendListByIds")
+    @PostMapping("/deleteLendListByIds")
     public Result deleteLendListByIds(String ids, String bookIds) {
         List list = Arrays.asList(ids.split(","));//借阅记录的id
         List<String> blist = Arrays.asList(bookIds.split(","));//图书信息的id
@@ -165,11 +162,11 @@ public class LendListController {
     /**
      * 异常还书
      *
-     * @param lendList
+     * @param lendList 借阅信息
      * @return JSON(异常还书)
      */
     @ResponseBody
-    @RequestMapping("/updateLendInfoSubmit")
+    @PostMapping("/updateLendInfoSubmit")
     public Result updateLendInfoSubmit(LendList lendList) {
         LendList lendListTemp = new LendList()
                 .setId(lendList.getId())
@@ -188,7 +185,12 @@ public class LendListController {
     }
 
     /**
-     * 查阅时间线
+     * 显示读者/借书的时间线
+     *
+     * @param flag  根据借书者或书名来显示时间线
+     * @param id    书籍ID或读者ID
+     * @param model
+     * @return
      */
     @RequestMapping("/queryLookBookList")
     public String queryLookBookList(String flag, Integer id, Model model) {
@@ -203,6 +205,13 @@ public class LendListController {
         return "lend/lookBookList";
     }
 
+    /**
+     * 读者登录后显示时间线
+     *
+     * @param request
+     * @param model
+     * @return
+     */
     @RequestMapping("/queryLookBookList2")
     public String queryLookBookList(HttpServletRequest request, Model model) {
         ReaderInfo readerInfo = (ReaderInfo) request.getSession().getAttribute("user");
@@ -214,10 +223,14 @@ public class LendListController {
     }
 
     /**
-     * 还书功能
+     * 还书
+     *
+     * @param ids     借阅记录ID
+     * @param bookIds 图书ID
+     * @return JSON
      */
     @ResponseBody
-    @RequestMapping("/backLendListByIds")
+    @PostMapping("/backLendListByIds")
     public Result backLendListByIds(String ids, String bookIds) {
         List list = Arrays.asList(ids.split(","));//借阅记录的id
         List blist = Arrays.asList(bookIds.split(","));//图书信息的id
@@ -227,7 +240,12 @@ public class LendListController {
 
 
     /**
-     * 页面跳转 异常还书
+     * 异常还书页面
+     *
+     * @param id     借阅ID
+     * @param bookId 书籍ID
+     * @param model
+     * @return 前端页面，通过thymeleaf添加ID和BID
      */
     @GetMapping("/excBackBook")
     public String excBackBook(@RequestParam("id") String id, @RequestParam("bookId") String bookId, Model model) {

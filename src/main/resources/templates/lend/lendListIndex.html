@@ -92,9 +92,9 @@
                     //{field: 'id', width: 100, title: 'ID', sort: true},
                     {
                         templet: '<div><a href="javascript:void(0)" style="color:#00b7ee" lay-event="bookInfoEvent">{{d.bookInfo.name}}</a></div>',
-                        width: 100, title: '图书名称'
+                        width: 200, title: '图书名称'
                     },
-                    {templet: '<div>{{d.readerInfo.readerNumber}}</div>', width: 120, title: '借书卡'},
+                    {templet: '<div>{{d.readerInfo.readerNumber}}</div>', width: 150, title: '借书卡'},
                     {
                         templet: '<div><a href="javascript:void(0)" style="color:#00b7ee" lay-event="readerInfoEvent">{{d.readerInfo.realName}}</a></div>',
                         width: 100, title: '借阅人'
@@ -102,7 +102,7 @@
                     // {templet: '<div>{{d.reader.name}}</div>', width: 80, title: '借阅人'},
                     {
                         templet: "<div>{{layui.util.toDateString(d.lendDate,'yyyy-MM-dd HH:mm:ss')}}</div>",
-                        width: 160,
+                        width: 170,
                         title: '借阅时间'
                     },
                     {
@@ -130,11 +130,11 @@
                             }
                         }
                     },
-                    {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    {title: '操作', minWidth: 80, toolbar: '#currentTableBar', align: "center"}
                 ]
             ],
             limits: [10, 15, 20, 25, 50, 100],
-            limit: 15,
+            limit: 10,
             page: true,
             skin: 'line',
             id: 'testReload'

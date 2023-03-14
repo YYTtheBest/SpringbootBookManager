@@ -1,6 +1,7 @@
 package com.YYT.springbootbookmanager.controller;
 
 
+import com.YYT.springbootbookmanager.entity.Admin;
 import com.YYT.springbootbookmanager.entity.Notice;
 import com.YYT.springbootbookmanager.service.INoticeService;
 import com.YYT.springbootbookmanager.utils.Result;
@@ -11,14 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>
- * 公告 前端控制器
- * </p>
+ * 公告
  *
  * @author YeYutong
  * @since 2022-11-22
@@ -52,11 +52,13 @@ public class NoticeController {
     }
 
     /**
-     * 查询所有通知
+     * 查询所有公告，带查询
      *
+     * @param topic 公告标题
+     * @param page
+     * @param limit
      * @return
      */
-//    todo:添加标题查询功能
     @GetMapping("/noticeAll")
     @ResponseBody
     public Result noticeAll(String topic, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
@@ -70,11 +72,21 @@ public class NoticeController {
 
     }
 
-    @RequestMapping("/addNotice")
+    /**
+     * 添加公告处理，时间默认为当前时间
+     *
+     * @param notice 公告信息
+     * @return
+     */
+    @PostMapping("/addNotice")
     @ResponseBody
-    public Result addNotice(@RequestBody Notice notice) {
+    public Result addNotice(@RequestBody Notice notice, HttpSession session) {
+        Admin user = (Admin) session.getAttribute("user");
 
-        boolean save = noticeService.save(notice.setCreateDate(LocalDateTime.now()));
+        System.out.println(notice);
+
+        boolean save = noticeService.save(notice.setCreateDate(LocalDateTime.now()).setAuthor(user.getUsername()));
+        
         if (save) {
             return Result.ok("消息添加成功");
         } else {
@@ -88,12 +100,17 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/addNotice")
-    @ResponseBody
-    public Result addNotice() {
-        return Result.ok("通知添加页面成功");
+    public String addNotice() {
+        return "notice/noticeAdd";
     }
 
-    @GetMapping("/deleteNotice")
+    /**
+     * 删除公告
+     *
+     * @param ids 公告ID
+     * @return
+     */
+    @PostMapping("/deleteNotice")
     @ResponseBody
     public Result deleteNotice(@RequestParam String ids) {
         List<String> idList = Arrays.asList(ids.split(","));
@@ -105,6 +122,13 @@ public class NoticeController {
         }
     }
 
+    /**
+     * 查看公告详询
+     *
+     * @param id 公告ID
+     * @param m
+     * @return
+     */
     @GetMapping("/queryNoticeById")
     public String queryNoticeById(int id, Model m) {
         Notice notice = noticeService.getById(id);

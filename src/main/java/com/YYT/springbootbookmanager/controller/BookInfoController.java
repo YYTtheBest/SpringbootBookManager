@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 图书信息 前端控制器
+ * 图书信息
  *
  * @author YeYutong
  * @since 2022-11-22
@@ -54,7 +54,7 @@ public class BookInfoController {
      * @param limit    限制
      * @return JSON（查询所有书籍）
      */
-    @RequestMapping("/bookAll")
+    @GetMapping("/bookAll")
     @ResponseBody
     public Object bookAll(BookInfo bookInfo, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int limit) {
 
@@ -93,10 +93,10 @@ public class BookInfoController {
     /**
      * 添加书
      *
-     * @param b
-     * @return Result.ok();Result.error();
+     * @param b 图书信息
+     * @return JSON
      */
-    @RequestMapping("/addbook")
+    @PostMapping("/addbook")
     @ResponseBody
     public Result addBook(@RequestBody BookInfo b) {
         log.warning(b.toString());
@@ -111,10 +111,10 @@ public class BookInfoController {
     /**
      * 修改书籍信息
      *
-     * @param b
-     * @return
+     * @param b 图书信息
+     * @return JSON
      */
-    @RequestMapping("/updateBook")
+    @PostMapping("/updateBook")
     @ResponseBody
     public Result updateBook(@RequestBody BookInfo b) {
         boolean update = bookService.updateById(b);
@@ -127,7 +127,7 @@ public class BookInfoController {
      * @param id
      * @return JSON(删除书籍)
      */
-    @RequestMapping("/deleteBook")
+    @PostMapping("/deleteBook")
     @ResponseBody
     public Result deleteBook(@RequestParam String id) {
         List<String> idList = Arrays.asList(id.split(","));

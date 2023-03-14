@@ -8,7 +8,6 @@ import com.YYT.springbootbookmanager.utils.Result;
 import com.YYT.springbootbookmanager.utils.pageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,9 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>
- * 图书类型表 前端控制器
- * </p>
+ * 图书类型
  *
  * @author YeYutong
  * @since 2022-11-22
@@ -31,12 +28,25 @@ public class TypeInfoController {
     @Resource
     private TypeInfoServiceImpl typeInfoService;
 
+    /**
+     * 图书类型列表页面
+     *
+     * @return
+     */
     @GetMapping("/typeIndex")
     public Object typeIndex() {
 
         return "type/typeIndex";
     }
 
+    /**
+     * 图书类型，带搜索
+     *
+     * @param name  图书类型名字
+     * @param page
+     * @param limit
+     * @return
+     */
     @RequestMapping("/typeAll")
     @ResponseBody
     public Result typeAll(String name, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
@@ -53,12 +63,10 @@ public class TypeInfoController {
     /**
      * 添加书籍类型
      *
-     * @param model
-     * @return
+     * @return html
      */
     @GetMapping("/addType")
-    public Object typeAddType(Model model) {
-        model.addAttribute("msg", "type添加页面");
+    public Object typeAddType() {
         return "type/typeadd";
 
     }
@@ -66,7 +74,7 @@ public class TypeInfoController {
     /**
      * 添加类型
      *
-     * @param type
+     * @param type 类型信息
      * @return
      */
     @PostMapping("/addType")
@@ -78,16 +86,13 @@ public class TypeInfoController {
 
     /**
      * 通过ID获取type信息用于查看或修改
-     * GET http://127.0.0.1:8090/type-info/queryTypeById
      *
-     * @param id
-     * @param m
+     * @param id 类型信息ID
      * @return
      */
     @GetMapping("/queryTypeById")
-    public String queryTypeById(int id, Model m) {
+    public String queryTypeById(int id) {
         TypeInfo type = typeInfoService.getById(id);
-        m.addAttribute("type", type);
         return "type/updateType";
 
     }
@@ -95,7 +100,7 @@ public class TypeInfoController {
     /**
      * 修改提交功能
      *
-     * @param info
+     * @param info 类型信息
      * @return
      */
     @RequestMapping("/updateTypeSubmit")
@@ -112,7 +117,7 @@ public class TypeInfoController {
      * @param ids
      * @return
      */
-    @RequestMapping("/deleteType")
+    @PostMapping("/deleteType")
     @ResponseBody
     public Result deleteType(String ids) {
         List<String> list = Arrays.asList(ids.split(","));
