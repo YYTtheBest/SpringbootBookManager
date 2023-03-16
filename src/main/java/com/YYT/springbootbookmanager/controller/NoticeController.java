@@ -62,7 +62,10 @@ public class NoticeController {
     @GetMapping("/noticeAll")
     @ResponseBody
     public Result noticeAll(String topic, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int limit) {
+
         QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("createDate");
+        
         if (topic != null) {
             queryWrapper.like(true, "topic", topic);
         }
@@ -86,7 +89,7 @@ public class NoticeController {
         System.out.println(notice);
 
         boolean save = noticeService.save(notice.setCreateDate(LocalDateTime.now()).setAuthor(user.getUsername()));
-        
+
         if (save) {
             return Result.ok("消息添加成功");
         } else {

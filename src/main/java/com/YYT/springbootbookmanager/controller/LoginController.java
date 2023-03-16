@@ -79,6 +79,7 @@ public class LoginController {
                     session.setAttribute("user", one);
                     session.setAttribute("type", "admin");
                     model.addAttribute("type", "admin");
+                    model.addAttribute("sup", one.getAdminType());
                 }
             } else {//来自读者信息表
                 ReaderInfo readerInfo;

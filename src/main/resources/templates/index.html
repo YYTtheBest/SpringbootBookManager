@@ -22,14 +22,14 @@
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header header">
         <div class="layui-logo layuimini-logo"></div>
-        <div class="layuimini-header-content" >
+        <div class="layuimini-header-content">
             <a>
                 <div class="layuimini-tool"><i title="展开" class="fa fa-outdent" data-side-fold="1"></i></div>
             </a>
 
             <!--电脑端头部菜单-->
-<!--            <ul class="layui-nav layui-layout-left layuimini-header-menu layuimini-menu-header-pc layuimini-pc-show">-->
-<!--            </ul>-->
+            <!--            <ul class="layui-nav layui-layout-left layuimini-header-menu layuimini-menu-header-pc layuimini-pc-show">-->
+            <!--            </ul>-->
 
             <!--手机端头部菜单-->
             <ul class="layui-nav layui-layout-left layuimini-header-menu layuimini-mobile-show">
@@ -52,10 +52,12 @@
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;"><span style="color: #BBBBBB" th:text="${session.user.getUsername()}">占位符</span></a>
+                    <a href="javascript:;"><span style="color: #BBBBBB"
+                                                 th:text="${session.user.getUsername()}">占位符</span></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="#" layuimini-content-href="/updatePassword" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                            <a href="#" layuimini-content-href="/updatePassword" data-title="修改密码"
+                               data-icon="fa fa-gears">修改密码</a>
                         </dd>
                         <dd>
                             <hr>
@@ -115,6 +117,7 @@
 </div>
 
 <ss id="userType" th:value="${type}"></ss>
+<ss id="sup" th:value="${sup}"></ss>
 <script>
     layui.use(['jquery', 'layer', 'miniAdmin'], function () {
         var $ = layui.jquery,
@@ -122,15 +125,30 @@
             miniAdmin = layui.miniAdmin;
 
         let val = $("#userType").attr("value");
+        let sup = $("#sup").attr("value");
         console.log(val)
-        var options = {
-            iniUrl: "static/api/init.json",    // 初始化接口
-            clearUrl: "static/api/clear.json", // 缓存清理接口
-            urlHashLocation: true,      // 是否打开hash定位
-            bgColorDefault: 0,          // 主题默认配置
-            multiModule: true,          // 是否开启多模块
-            menuChildOpen: false,       // 是否默认展开菜单
-        };
+        console.log(sup)
+        if (val == "admin") {
+            if (sup == "1") {
+                var options = {
+                    iniUrl: "static/api/initSu.json",    // 初始化接口
+                    clearUrl: "static/api/clear.json", // 缓存清理接口
+                    urlHashLocation: true,      // 是否打开hash定位
+                    bgColorDefault: 0,          // 主题默认配置
+                    multiModule: true,          // 是否开启多模块
+                    menuChildOpen: false,       // 是否默认展开菜单
+                };
+            } else {
+                var options = {
+                    iniUrl: "static/api/init.json",    // 初始化接口
+                    clearUrl: "static/api/clear.json", // 缓存清理接口
+                    urlHashLocation: true,      // 是否打开hash定位
+                    bgColorDefault: 0,          // 主题默认配置
+                    multiModule: true,          // 是否开启多模块
+                    menuChildOpen: false,       // 是否默认展开菜单
+                };
+            }
+        }
         if (val == "reader") {
             options = {
                 iniUrl: "static/api/initreader.json",    // 初始化接口
@@ -147,10 +165,10 @@
 
 
         $('.loginOut').on("click", function () {
-            layer.msg('退出登录成功',  {
+            layer.msg('退出登录成功', {
                 icon: 6,
                 time: 500
-            },function () {
+            }, function () {
                 window.location = '${pageContext.request.contextPath}/loginOut';
             });
         });

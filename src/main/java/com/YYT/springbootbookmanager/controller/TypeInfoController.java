@@ -8,6 +8,7 @@ import com.YYT.springbootbookmanager.utils.Result;
 import com.YYT.springbootbookmanager.utils.pageHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -91,8 +92,9 @@ public class TypeInfoController {
      * @return
      */
     @GetMapping("/queryTypeById")
-    public String queryTypeById(int id) {
+    public String queryTypeById(int id, Model m) {
         TypeInfo type = typeInfoService.getById(id);
+        m.addAttribute("type", type);
         return "type/updateType";
 
     }

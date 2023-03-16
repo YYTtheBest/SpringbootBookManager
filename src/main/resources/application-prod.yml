@@ -21,7 +21,7 @@ mybatis-plus:
         cache-enabled: false
   configuration:
     map-underscore-to-camel-case: false
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
   port: 8001
 logging:
